@@ -22,6 +22,7 @@ export const submitBlog = (values, history) => async dispatch => {
 
 export const fetchBlogs = () => async dispatch => {
   const res = await axios.get('/api/blogs');
+  
 
   dispatch({ type: FETCH_BLOGS, payload: res.data });
 };
