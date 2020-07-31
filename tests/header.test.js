@@ -1,4 +1,6 @@
 const puppeteer = require('puppeteer');
+const sessionFactory = require('./factories/sessionFactory');
+const userFactory = require('./factories/userFactory');
 
 let browser, page;
 
@@ -26,4 +28,20 @@ test('clicking login starts the oath flow', async () => {
     const url = await page.url();
     expect(url).toMatch(/accounts\.google\.com/);
     
+});
+
+test('When signed in, shows logout button', async () => {
+    const user = await userFactory();
+    const {session, sig} = await sessionFactory(user);
+
+    await page.setCookie({name: 'session', value: session});
+    await page.setCookie({name: 'session.sig', value: sig});
+    await page.goto('localhost:3000');
+    await page.waitFor('a[href="/api/logout"]');
+
+    const text = await page.$eval('a[href="/api/logout"]', el => el.innerHTML);
+
+    expect(text).toEqual('Logout')
+
+
 })
