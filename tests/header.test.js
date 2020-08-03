@@ -1,4 +1,3 @@
-
 const CustomPage = require('./helpers/page')
 
 let page;
