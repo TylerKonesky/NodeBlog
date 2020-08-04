@@ -1,3 +1,4 @@
+Number.prototype._called = {};
 const CustomPage = require('./helpers/page');
 
 let page;
@@ -49,17 +50,54 @@ describe('When logged in', () => {
         });
     });
 
-    // describe('And using invalid inputs', () => {
-    //     beforeEach( async () => {
-    //         await page.click('form button'); 
-    //     });
-    //     test('the form shows an error message', async () => {
-    //         const title = await page.getContentsOf('.title .red-text');
-    //         expect(title).toMatch('You must provide a value');
-    //         const content = await page.getContentsOf('.content .red-text')
-    //         expect(content).toMatch('You must provide a value');
+    describe('And using invalid inputs', () => {
+        beforeEach( async () => {
+            await page.click('form button'); 
+        });
+        test('the form shows an error message', async () => {
+            const title = await page.getContentsOf('.title .red-text');
+            expect(title).toMatch('You must provide a value');
+            const content = await page.getContentsOf('.content .red-text')
+            expect(content).toMatch('You must provide a value');
             
-    //     });
-    // });
+        });
+    });
 });
+
+describe('User is not logged in', () =>{
+    test('User cannot create blog posts', async () => {
+        const result = await page.evaluate(
+            () => {
+                return fetch('/api/blogs', {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        title: "My Test Title",
+                        content: "My Test Content"
+                    })
+                }).then( res => res.json());
+            });
+        expect(result).toEqual({error: 'You must log in!'})
+    });
+
+    test('User cannot get a list of blogs', async () => {
+        const result = await page.evaluate(
+            () => {
+                return fetch('/api/blogs', {
+                    method: 'GET', 
+                    credentials: 'same-origin',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }).then(res => res.json());
+            });
+            expect(result).toEqual({error: 'You must log in!'})
+    });
+})
+
+
+
 
