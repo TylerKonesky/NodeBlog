@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "jest": {
-    "setupFilesAfterEnv" : ["./tests/setup.js"]
+    "setupFilesAfterEnv": [
+      "./tests/setup.js"
+    ]
   },
   "scripts": {
     "start": "node index.js",
@@ -23,6 +25,7 @@
     "concurrently": "^3.6.1",
     "cookie-session": "^2.0.0-rc.1",
     "express": "^4.17.1",
+    "jest": "24.9.0",
     "migrate-mongoose": "^3.2.2",
     "mongoose": "^4.13.21",
     "nodemon": "^1.19.4",
