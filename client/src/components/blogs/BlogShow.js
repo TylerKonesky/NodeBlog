@@ -1,10 +1,19 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { fetchBlog } from '../../actions';
+import './BlogShow.css'
 
 class BlogShow extends Component {
   componentDidMount() {
     this.props.fetchBlog(this.props.match.params._id);
+  }
+
+  renderImage(){
+    if(this.props.blog.imageUrl){
+      return(
+        <img className="blog-image" src={`https://my-blog-images-123.s3-us-west-2.amazonaws.com/${this.props.blog.imageUrl}`}></img>
+      )
+    }
   }
 
   render() {
@@ -18,6 +27,7 @@ class BlogShow extends Component {
       <div>
         <h3>{title}</h3>
         <p>{content}</p>
+        {this.renderImage()}
       </div>
     );
   }
@@ -28,3 +38,5 @@ function mapStateToProps({ blogs }, ownProps) {
 }
 
 export default connect(mapStateToProps, { fetchBlog })(BlogShow);
+
+
